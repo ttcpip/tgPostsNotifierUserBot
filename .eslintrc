@@ -1,0 +1,58 @@
+// install cmd: npx install-peerdeps --dev eslint-config-airbnb-base
+{
+  "env": {
+    "commonjs": true,
+    "es2020": true,
+    "node": true
+  },
+  "extends": ["airbnb-base", "plugin:prettier/recommended"],
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "ecmaVersion": 11
+  },
+  "rules": {
+    "curly": ["error", "multi-or-nest", "consistent"],
+    "lines-around-directive": "off",
+    "padding-line-between-statements": "error",
+    "linebreak-style": "off",
+    "eol-last": ["warn", "always"],
+    "no-unused-vars": "off",
+    "prefer-template": "off",
+    "no-use-before-define": ["error", {
+      "functions": false
+    }],
+    "max-len": "off",
+    "no-console": "off",
+    "nonblock-statement-body-position": ["error", "any"],
+    "camelcase": "off",
+    "strict": "off",
+    "no-plusplus": "off",
+    "consistent-return": "off",
+    "no-await-in-loop": "off",
+    "no-restricted-syntax": "off",
+    "guard-for-in": "off",
+    "no-nested-ternary": "off",
+    "no-shadow": "off",
+    "no-param-reassign": "off",
+    "no-return-await": "off",
+    "no-underscore-dangle": "off",
+    "global-require": "off",
+    "no-continue": "off",
+    "no-mixed-operators": "off",
+    "no-constant-condition": "off",
+    "no-loop-func": "off",
+    "import/order": "off",
+    "prefer-const": [
+      "error",
+      {
+        "destructuring": "all"
+      }
+    ],
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ]
+  }
+}

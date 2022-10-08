@@ -1,0 +1,42 @@
+{
+  "name": "tg-posts-notifier-user-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "node src/main.js",
+    "lint": "eslint . --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dedent": "^0.7.0",
+    "dotenv": "^10.0.0",
+    "git-revision-webpack-plugin": "^5.0.0",
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.34",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.13.0",
+    "shelljs": "^0.8.5",
+    "tdl": "^7.0.0",
+    "tdl-tdlib-addon": "^1.0.1",
+    "telegraf": "^3.38.0",
+    "telegraf-question": "^1.1.4",
+    "telegram-format": "^2.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.15.5",
+    "@babel/eslint-parser": "^7.15.4",
+    "@babel/plugin-proposal-class-properties": "^7.14.5",
+    "@babel/plugin-proposal-private-methods": "^7.14.5",
+    "@babel/preset-env": "^7.15.6",
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "7.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.1.2",
+    "tdlib-types": "^0.1001008.1"
+  }
+}
