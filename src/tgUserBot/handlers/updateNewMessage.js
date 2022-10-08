@@ -16,7 +16,6 @@ async function onUpdateNewMessage(client, update) {
     if (
       !(
         !message.is_outgoing &&
-        message.is_channel_post &&
         message.content &&
         message.content._ === 'messagePinMessage' &&
         message.chat_id === settings.dataa.tgChannelId
