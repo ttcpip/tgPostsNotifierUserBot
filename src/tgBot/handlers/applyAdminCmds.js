@@ -19,7 +19,9 @@ const helpMessage = `
 /accInfo - получить информацию о текущей залогиненном аккаунте
 /accLogout - выйти из аккаунта
 
-/tgChannelId [id] - посмотреть/установить айди тг канала
+/trackingChat [add/del/list] [id] - добавить/удалить/посмотреть список отслеживаемых чатов
+
+/chatInfo [id] - посмотреть инфу о чате по его айди
 
 /getChats [count] - получить чаты аккаунта
 
@@ -284,6 +286,7 @@ async function adminCmdsHandler(ctx) {
       ...settings.dataa,
       tgUserBotPhoneNumber: number,
     }
+    settings.changed('data', true)
     await settings.save()
 
     return await ctx.reply(`Установка номера прошла успешно: ${number}`)
@@ -320,33 +323,68 @@ async function adminCmdsHandler(ctx) {
     )
   }
 
-  if (command === '/tgChannelId') {
+  if (command === '/trackingChat') {
+    const action = arg1
+
     const settings = SettingsManager.get()
-    if (!arg1) {
-      await ctx.reply(`Текущий тг айди: ${settings.dataa.tgChannelId}`)
+    const list = settings.dataa.tgTrackingChatsIds
+    if (!arg1 || action === 'list') {
+      const chatsMsg = Object.keys(list)
+        .sort((a, b) => a - b)
+        .map(
+          (chatId, i) =>
+            `${i + 1}\\) ${markdownv2.monospace(`${chatId || 0}`)}`,
+        )
+        .join('\n')
+      const message = dedent`
+        ✏️ Отслеживаемые чаты
 
-      const chatInfo = await TgUserBotManager.get().invoke({
-        _: 'getChat',
-        chat_id: settings.dataa.tgChannelId,
-      })
-      await ctx.reply(dedent`
-        📝 Информация о чате
-      
-        Заголовок: ${chatInfo.title}
-        
-        Тип: ${chatInfo.type._}
-      `)
+        ${chatsMsg}
 
-      return
+        ${markdownv2.escape(`Для добавления/удаления:`)}
+        ${markdownv2.escape(`/trackingChat [add/del] [id]`)}
+      `
+
+      return await ctx.reply(message, { parse_mode: 'MarkdownV2' })
     }
-    const tgChannelId = +arg1
-    if (!Number.isFinite(tgChannelId))
-      return await ctx.reply(`Тг айди введет некорректно`)
 
-    settings.dataa = { ...settings.dataa, tgChannelId }
+    const chatId = +arg2
+    if (!Number.isFinite(chatId))
+      return await ctx.reply(`Айди чата введен некорректно`)
+    if (action === 'add') {
+      if (list[chatId]) return await ctx.reply(`Этот чат уже есть в списке`)
+
+      list[chatId] = true
+    } else {
+      if (!list[chatId])
+        return await ctx.reply(`Этого чата и так нету в списке`)
+
+      delete list[chatId]
+    }
+
+    settings.dataa = { ...settings.dataa, tgTrackingChatsIds: list }
+    settings.changed('data', true)
     await settings.save()
 
-    return await ctx.reply(`Тг айди успешно установлен`)
+    return await ctx.reply(`Операция завершена успешно!`)
+  }
+
+  if (command === '/chatInfo') {
+    const chat_id = +arg1
+    if (!Number.isFinite(chat_id))
+      return await ctx.reply(`Айди чата введен некорректно`)
+    const resp = await TgUserBotManager.get().invoke({
+      _: 'getChat',
+      chat_id,
+    })
+    const message = dedent`
+      📝 Информация о чате ${resp.id}
+
+      Заголовок: ${resp.title}
+      
+      Тип чата: ${resp.type._}
+    `
+    return await ctx.reply(message)
   }
 
   if (command === '/getChats') {
@@ -382,7 +420,7 @@ async function adminCmdsHandler(ctx) {
       )
       .join('\n')
     const message = dedent`
-      ✏️ Последние чаты
+      ✏️ Чаты
 
       ${chatsMsg}
     `

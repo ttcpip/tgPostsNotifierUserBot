@@ -18,7 +18,7 @@ async function onUpdateNewMessage(client, update) {
         !message.is_outgoing &&
         message.content &&
         message.content._ === 'messagePinMessage' &&
-        message.chat_id === settings.dataa.tgChannelId
+        settings.dataa.tgTrackingChatsIds[message.chat_id]
       )
     )
       return

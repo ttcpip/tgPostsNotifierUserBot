@@ -4,5 +4,8 @@
   "tgUserBotApiHash": "",
   "tgAdminChatId": -1000,
   "tgUserBotPhoneNumber": "",
-  "tgChannelId": -1000
+  "tgTrackingChatsIds": {
+    "-1000": true,
+    "-2000": true
+  }
 }
