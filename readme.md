@@ -25,3 +25,9 @@ https://github.com/Bannerets/tdl/blob/HEAD/packages/prebuilt-tdlib/README.md
 https://github.com/ForNeVeR/tdlib.native/releases
 
 https://github.com/Muaath5/TDLibBinaries/tree/main/tdjson
+
+### Possible problems and solutions
+
+- Problem: `Error: Dynamic Loading Error: libc++.so.1: cannot open shared object file: No such file or directory`
+
+- Solution: ```apt install libc++-dev```
