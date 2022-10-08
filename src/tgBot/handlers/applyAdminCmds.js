@@ -21,6 +21,8 @@ const helpMessage = `
 
 /tgChannelId [id] - посмотреть/установить айди тг канала
 
+/getChats [count] - получить чаты аккаунта
+
 `
 
 const helpCoder = `
@@ -345,6 +347,52 @@ async function adminCmdsHandler(ctx) {
     await settings.save()
 
     return await ctx.reply(`Тг айди успешно установлен`)
+  }
+
+  if (command === '/getChats') {
+    const limit = +arg1 || 10
+    const chatsResp = await TgUserBotManager.get().invoke({
+      _: 'getChats',
+      chat_list: null,
+      limit,
+    })
+
+    let errors = 0
+    const info = {}
+    for (const chat_id of chatsResp.chat_ids) {
+      try {
+        const resp = await TgUserBotManager.get().invoke({
+          _: 'getChat',
+          chat_id,
+        })
+        info[chat_id] = resp
+      } catch (err) {
+        errors++
+      }
+    }
+
+    const chatsMsg = Object.keys(info)
+      .map(
+        (chatId, i) =>
+          `${i + 1}\\) ${markdownv2.monospace(
+            `${info[chatId].id || 0}`,
+          )} \\| ${markdownv2.bold(
+            markdownv2.escape(`${info[chatId].title || ''}`),
+          )}`,
+      )
+      .join('\n')
+    const message = dedent`
+      ✏️ Последние чаты
+
+      ${chatsMsg}
+    `
+
+    await ctx.reply(message, { parse_mode: 'MarkdownV2' })
+
+    if (errors > 0)
+      await ctx.reply(`При получении чатов призошло ошибок: ${errors}`)
+
+    return 1
   }
 }
 
